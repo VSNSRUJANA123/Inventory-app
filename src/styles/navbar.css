@@ -1,0 +1,35 @@
+.nav-content {
+  background-color: #f6f6f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+.nav-content .logo {
+  color: #e3001b;
+  font-family: Mona Sans, "Helvetica Neue", "Helvetica, Arial,sans-serif ";
+}
+.nav-ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+.nav-ul li {
+  margin-right: 10px;
+  cursor: pointer;
+  padding: 0;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+.link {
+  text-decoration: none;
+  color: inherit;
+  padding: 0;
+}
+.nav-ul a.active {
+  background-color: #e3001b;
+  color: white;
+  border-radius: 10px;
+  padding: 5px 7px;
+}

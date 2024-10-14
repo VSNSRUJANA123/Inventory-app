@@ -11,7 +11,7 @@ const Supplier = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editSupplierId, setEditSupplierId] = useState(null);
-  const [selectEmployee, setSelectEmployee] = useState("");
+  // const [selectEmployee, setSelectEmployee] = useState("");
   const [supplierData, setSupplierData] = useState({
     firstname: "",
     lastname: "",
@@ -85,7 +85,6 @@ const Supplier = () => {
       try {
         await axios.post(`${api}/suppliers/`, supplierData);
         fetchSupplier();
-        console.log("select employee", selectEmployee);
         setSupplierData({
           firstname: "",
           lastname: "",
@@ -126,6 +125,7 @@ const Supplier = () => {
 
   return (
     <div className="form-container">
+      <h2 className="table-name">Supplier Form</h2>
       <form className="form" onSubmit={handleSubmit}>
         <div className="form-div">
           <input

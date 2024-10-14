@@ -108,6 +108,7 @@ const Home = () => {
 
   return (
     <div className="form-container">
+      <h2 className="table-name">Employee Form</h2>
       <form className="form" onSubmit={handleSubmit}>
         <div className="form-div">
           <input

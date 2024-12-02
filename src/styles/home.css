@@ -1,6 +1,8 @@
 .form-container {
+  flex: 10;
   padding: 20px;
   background-color: white;
+  overflow-x: hidden;
 }
 .submit-btn {
   background-color: #e3001b;
@@ -57,11 +59,11 @@ input {
   color: #e3001b;
   font-size: 20px;
 }
-
+/* 
 .supplier-box input {
   width: 50%;
   margin-right: 7px;
-}
+} */
 textarea {
   resize: none;
   margin-top: 10px;
@@ -75,14 +77,15 @@ textarea {
   height: 10vh;
   text-align: center;
 }
-@media (max-width: 426px) {
+@media (max-width: 767px) {
   .table-container {
     overflow-x: scroll;
   }
   .form-div {
     grid-template-columns: 1fr;
   }
-  .supplier-box {
+
+  /* .supplier-box {
     display: block;
     margin-bottom: 0px;
   }
@@ -90,5 +93,5 @@ textarea {
     width: 100%;
     margin-right: 0px;
     margin-bottom: 10px;
-  }
+  } */
 }

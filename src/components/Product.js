@@ -5,6 +5,7 @@ import { api } from "../url";
 import { MdModeEditOutline } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import ClipLoader from "react-spinners/ClipLoader";
+import Sidenav from "./Sidenav";
 const Product = () => {
   const [loading, setLoading] = useState(false);
   const [supplier, setSupplier] = useState([]);
@@ -99,111 +100,114 @@ const Product = () => {
   };
 
   return (
-    <div className="form-container">
-      <h2 className="table-name">Product Form</h2>
-      <form className="form" onSubmit={handleSubmit}>
-        <div className="form-div">
-          <input
-            onChange={handleChange}
-            type="text"
-            placeholder="Code"
-            name="code"
-            value={supplierData.code}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Name"
-            name="name"
-            value={supplierData.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            placeholder="price"
-            name="price"
-            value={supplierData.price}
-            onChange={handleChange}
-            required
-          />
-          <select
-            name="addedby"
-            value={supplierData.addedby}
-            onChange={handleChange}
-          >
-            <option value="">-- Select Employee --</option>
-            {employeeData.map((data) => {
-              return (
-                <option value={data.id} key={data.id}>
-                  {data.firstname + data.lastname}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-        <textarea
-          maxLength="50"
-          type="text"
-          name="description"
-          rows="5"
-          value={supplierData.description}
-          onChange={handleChange}
-          placeholder="description"
-        />
-        <button type="submit" className="submit-btn">
-          {isEditing ? "Update Contact" : "Add Contact"}
-        </button>
-      </form>
-      <h3 className="table-name">Product Data</h3>
-      {loading ? (
-        <div className={`${loading && "loading"}`}>
-          <ClipLoader color="rgba(227, 0, 27, 1)" />
-        </div>
-      ) : (
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>code</th>
-                <th>name</th>
-                <th>price</th>
-                <th>addedby</th>
-                <th>Edit</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {supplier.map((items) => {
+    <div className="admin-page">
+      <Sidenav />
+      <div className="form-container">
+        <h2 className="table-name">Product Form</h2>
+        <form className="form" onSubmit={handleSubmit}>
+          <div className="form-div">
+            <input
+              onChange={handleChange}
+              type="text"
+              placeholder="Code"
+              name="code"
+              value={supplierData.code}
+              required
+            />
+            <input
+              type="text"
+              placeholder="Name"
+              name="name"
+              value={supplierData.name}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              placeholder="price"
+              name="price"
+              value={supplierData.price}
+              onChange={handleChange}
+              required
+            />
+            <select
+              name="addedby"
+              value={supplierData.addedby}
+              onChange={handleChange}
+            >
+              <option value="">-- Select Employee --</option>
+              {employeeData.map((data) => {
                 return (
-                  <tr key={items.id}>
-                    <td>{items.code}</td>
-                    <td>{items.name}</td>
-                    <td>{items.price}</td>
-                    <td>{items.addedby}</td>
-                    <td>
-                      <button
-                        className="btn-icon"
-                        onClick={() => handleEdit(items)}
-                      >
-                        <MdModeEditOutline />
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="btn-icon"
-                        onClick={() => handleDelete(items.id)}
-                      >
-                        <MdDelete />
-                      </button>
-                    </td>
-                  </tr>
+                  <option value={data.id} key={data.id}>
+                    {data.firstname + data.lastname}
+                  </option>
                 );
               })}
-            </tbody>
-          </table>
-        </div>
-      )}
+            </select>
+          </div>
+          <textarea
+            maxLength="50"
+            type="text"
+            name="description"
+            rows="5"
+            value={supplierData.description}
+            onChange={handleChange}
+            placeholder="description"
+          />
+          <button type="submit" className="submit-btn">
+            {isEditing ? "Update Contact" : "Add Contact"}
+          </button>
+        </form>
+        <h3 className="table-name">Product Data</h3>
+        {loading ? (
+          <div className={`${loading && "loading"}`}>
+            <ClipLoader color="rgba(227, 0, 27, 1)" />
+          </div>
+        ) : (
+          <div className="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>code</th>
+                  <th>name</th>
+                  <th>price</th>
+                  <th>addedby</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                {supplier.map((items) => {
+                  return (
+                    <tr key={items.id}>
+                      <td>{items.code}</td>
+                      <td>{items.name}</td>
+                      <td>{items.price}</td>
+                      <td>{items.addedby}</td>
+                      <td>
+                        <button
+                          className="btn-icon"
+                          onClick={() => handleEdit(items)}
+                        >
+                          <MdModeEditOutline />
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="btn-icon"
+                          onClick={() => handleDelete(items.id)}
+                        >
+                          <MdDelete />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

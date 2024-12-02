@@ -1,0 +1,42 @@
+.admin-page {
+  display: flex;
+  /* background-color: red; */
+}
+.admin-container {
+  display: flex;
+  flex: 10;
+}
+.side-nav-content {
+  overflow-x: hidden;
+  flex: 1.2;
+  background-color: #f6f6f6;
+  padding: 15px;
+  overflow-y: hidden;
+}
+.side-nav-content ul {
+  /* height: inherit; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.side-nav-content li {
+  margin-bottom: 10px;
+}
+.side-nav-content li a.active {
+  color: red;
+}
+.logOut-btn {
+  padding: 0;
+  margin: 0;
+  color: rgb(240, 159, 159);
+  opacity: 1;
+  border: none;
+  background: transparent;
+  transform: opacity;
+}
+.logOut-btn :hover {
+  opacity: 0;
+}

@@ -1,6 +1,15 @@
 import "../styles/navbar.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 const Navbar = () => {
+  const token = Cookies.get("token");
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    Cookies.remove("token");
+    Cookies.remove("role");
+    navigate("/login", { replace: true });
+  };
+
   return (
     <nav className="nav-content">
       <NavLink className="link" to="/">
@@ -12,21 +21,15 @@ const Navbar = () => {
             Home
           </NavLink>
         </li>
-        <li>
-          <NavLink className="link" to="/supplier">
-            Supplier
-          </NavLink>
-        </li>
-        <li>
-          <NavLink className="link" to="/product">
-            Product
-          </NavLink>
-        </li>
-        <li>
-          <NavLink className="link" to="/order">
-            Order
-          </NavLink>
-        </li>
+        {!token ? (
+          <li>
+            <NavLink className="link" to="/login">
+              Login
+            </NavLink>
+          </li>
+        ) : (
+          <li onClick={handleLogout}>Logout</li>
+        )}
       </ul>
     </nav>
   );

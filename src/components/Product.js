@@ -6,10 +6,13 @@ import { MdModeEditOutline } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import ClipLoader from "react-spinners/ClipLoader";
 import Sidenav from "./Sidenav";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
+import { IoIosClose } from "react-icons/io";
 const Product = () => {
   const [loading, setLoading] = useState(false);
   const [supplier, setSupplier] = useState([]);
-  const [employeeData, setEmployeeData] = useState([]);
+  // const [employeeData, setEmployeeData] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editSupplierId, setEditSupplierId] = useState(null);
   const [supplierData, setSupplierData] = useState({
@@ -17,7 +20,6 @@ const Product = () => {
     name: "",
     description: "",
     price: "",
-    addedby: "",
   });
   const fetchSupplier = async () => {
     setLoading(true);
@@ -34,21 +36,20 @@ const Product = () => {
   useEffect(() => {
     fetchSupplier();
   }, []);
-  const fetchEmployeeData = async () => {
-    try {
-      const response = await axios(`${api}/employees`);
-      setEmployeeData(response.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  useEffect(() => {
-    fetchEmployeeData();
-  }, []);
+  // const fetchEmployeeData = async () => {
+  //   try {
+  //     const response = await axios(`${api}/employees`);
+  //     setEmployeeData(response.data);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchEmployeeData();
+  // }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(supplierData.addedBy);
     if (isEditing) {
       try {
         await axios.put(`${api}/products/${editSupplierId}`, supplierData);
@@ -60,7 +61,6 @@ const Product = () => {
           name: "",
           description: "",
           price: "",
-          addedby: "",
         });
       } catch (error) {
         console.error("Error updating contact:", error);
@@ -74,7 +74,6 @@ const Product = () => {
           name: "",
           description: "",
           price: "",
-          addedby: "",
         });
       } catch (error) {
         console.error("Error adding contact:", error);
@@ -103,108 +102,170 @@ const Product = () => {
     <div className="admin-page">
       <Sidenav />
       <div className="form-container">
-        <h2 className="table-name">Product Form</h2>
-        <form className="form" onSubmit={handleSubmit}>
-          <div className="form-div">
-            <input
-              onChange={handleChange}
-              type="text"
-              placeholder="Code"
-              name="code"
-              value={supplierData.code}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Name"
-              name="name"
-              value={supplierData.name}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              placeholder="price"
-              name="price"
-              value={supplierData.price}
-              onChange={handleChange}
-              required
-            />
-            <select
-              name="addedby"
-              value={supplierData.addedby}
-              onChange={handleChange}
-            >
-              <option value="">-- Select Employee --</option>
-              {employeeData.map((data) => {
-                return (
-                  <option value={data.id} key={data.id}>
-                    {data.firstname + data.lastname}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <textarea
-            maxLength="50"
-            type="text"
-            name="description"
-            rows="5"
-            value={supplierData.description}
-            onChange={handleChange}
-            placeholder="description"
-          />
-          <button type="submit" className="submit-btn">
-            {isEditing ? "Update Contact" : "Add Contact"}
-          </button>
-        </form>
         <h3 className="table-name">Product Data</h3>
         {loading ? (
           <div className={`${loading && "loading"}`}>
             <ClipLoader color="rgba(227, 0, 27, 1)" />
           </div>
         ) : (
-          <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>code</th>
-                  <th>name</th>
-                  <th>price</th>
-                  <th>addedby</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {supplier.map((items) => {
-                  return (
-                    <tr key={items.id}>
-                      <td>{items.code}</td>
-                      <td>{items.name}</td>
-                      <td>{items.price}</td>
-                      <td>{items.addedby}</td>
-                      <td>
-                        <button
-                          className="btn-icon"
-                          onClick={() => handleEdit(items)}
-                        >
-                          <MdModeEditOutline />
-                        </button>
-                      </td>
-                      <td>
-                        <button
-                          className="btn-icon"
-                          onClick={() => handleDelete(items.id)}
-                        >
-                          <MdDelete />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+          <div>
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>code</th>
+                    <th>name</th>
+                    <th>price</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {supplier.map((items) => {
+                    return (
+                      <tr key={items.id}>
+                        <td>{items.code}</td>
+                        <td>{items.name}</td>
+                        <td>{items.price}</td>
+                        <td>
+                          <Popup
+                            trigger={
+                              <button className="btn-icon">
+                                <MdModeEditOutline
+                                  onClick={() => handleEdit(items)}
+                                />
+                              </button>
+                            }
+                            modal
+                            nested
+                          >
+                            {(close) => (
+                              <div>
+                                <div className="form-title">
+                                  <h2 className="table-name">Product Form</h2>
+                                  <button
+                                    className="close-btn"
+                                    onClick={() => close()}
+                                  >
+                                    <IoIosClose />
+                                  </button>
+                                </div>
+                                <form className="form" onSubmit={handleSubmit}>
+                                  <div className="form-div">
+                                    <input
+                                      onChange={handleChange}
+                                      type="text"
+                                      placeholder="Code"
+                                      name="code"
+                                      value={supplierData.code}
+                                      required
+                                    />
+                                    <input
+                                      type="text"
+                                      placeholder="Name"
+                                      name="name"
+                                      value={supplierData.name}
+                                      onChange={handleChange}
+                                      required
+                                    />
+                                    <input
+                                      type="text"
+                                      placeholder="price"
+                                      name="price"
+                                      value={supplierData.price}
+                                      onChange={handleChange}
+                                      required
+                                    />
+                                  </div>
+                                  <textarea
+                                    maxLength="50"
+                                    type="text"
+                                    name="description"
+                                    rows="5"
+                                    value={supplierData.description}
+                                    onChange={handleChange}
+                                    placeholder="description"
+                                  />
+                                  <button type="submit" className="submit-btn">
+                                    Update Product
+                                  </button>
+                                </form>
+                              </div>
+                            )}
+                          </Popup>
+                        </td>
+                        <td>
+                          <button
+                            className="btn-icon"
+                            onClick={() => handleDelete(items.id)}
+                          >
+                            <MdDelete />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <Popup
+                trigger={<button className="submit-btn">Add Product</button>}
+                modal
+                nested
+              >
+                {(close) => (
+                  <div>
+                    <div className="form-title">
+                      <h2 className="table-name">Product Form</h2>
+                      <button className="close-btn" onClick={() => close()}>
+                        <IoIosClose />
+                      </button>
+                    </div>
+                    <form className="form" onSubmit={handleSubmit}>
+                      <div className="form-div">
+                        <input
+                          onChange={handleChange}
+                          type="text"
+                          placeholder="Code"
+                          name="code"
+                          value={supplierData.code}
+                          required
+                        />
+                        <input
+                          type="text"
+                          placeholder="Name"
+                          name="name"
+                          value={supplierData.name}
+                          onChange={handleChange}
+                          required
+                        />
+                        <input
+                          type="text"
+                          placeholder="price"
+                          name="price"
+                          value={supplierData.price}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+                      <textarea
+                        maxLength="50"
+                        type="text"
+                        name="description"
+                        rows="5"
+                        value={supplierData.description}
+                        onChange={handleChange}
+                        placeholder="description"
+                      />
+                      <button type="submit" className="submit-btn">
+                        Add Product
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </Popup>
+            </div>
           </div>
         )}
       </div>

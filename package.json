@@ -20,6 +20,7 @@
     "react-scripts": "5.0.1",
     "react-spinners": "^0.14.1",
     "react-toastify": "^10.0.6",
+    "reactjs-popup": "^2.0.6",
     "url": "^0.11.4",
     "web-vitals": "^2.1.4"
   },

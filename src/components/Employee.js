@@ -6,18 +6,23 @@ import { MdModeEditOutline } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import ClipLoader from "react-spinners/ClipLoader";
 import Sidenav from "./Sidenav";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
+import { IoIosClose } from "react-icons/io";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Employee = () => {
   const [contacts, setContacts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [contactData, setContactData] = useState({
     firstname: "",
     lastname: "",
     email: "",
     phonenumber: "",
     job_title: "",
-    password: "",
     company_name: "",
     address: "",
+    status: "",
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -53,7 +58,10 @@ const Employee = () => {
     e.preventDefault();
     if (isEditing) {
       try {
-        await axios.put(`${api}/employees/${editContactId}`, contactData);
+        const response = await axios.put(
+          `${api}/employees/${editContactId}`,
+          contactData
+        );
         fetchContacts();
         setIsEditing(false);
         setEditContactId(null);
@@ -63,28 +71,69 @@ const Employee = () => {
           email: "",
           phonenumber: "",
           job_title: "",
-          password: "",
           company_name: "",
           address: "",
+          status: "",
+        });
+        toast(response.data.message, {
+          position: "top-right",
+          autoClose: 600,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
         });
       } catch (error) {
+        toast(error.response.data.error, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         console.error("Error updating contact:", error);
       }
     } else {
       try {
-        await axios.post(`${api}/employees/`, contactData);
+        const response = await axios.post(`${api}/employees/`, contactData);
         fetchContacts();
+        // setClosePopup(!closePopup);
         setContactData({
           firstname: "",
           lastname: "",
           email: "",
           phonenumber: "",
           job_title: "",
-          password: "",
           company_name: "",
           address: "",
+          status: "",
+        });
+        toast(response.data.message, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
         });
       } catch (error) {
+        toast(error.response.data.error, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         console.error("Error adding contact:", error);
       }
     }
@@ -98,9 +147,29 @@ const Employee = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${api}/employees/${id}`);
+      const response = await axios.delete(`${api}/employees/${id}`);
       fetchContacts();
+      toast(response.data.message, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } catch (error) {
+      toast(error.response.data.error, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       console.error("Error deleting contact:", error);
     }
   };
@@ -109,138 +178,240 @@ const Employee = () => {
     <div className="admin-page">
       <Sidenav />
       <div className="form-container">
-        <h2 className="table-name">Employee Form</h2>
-        <form className="form" onSubmit={handleSubmit}>
-          <div className="form-div">
-            <input
-              type="text"
-              name="firstname"
-              value={contactData.firstname}
-              onChange={handleChange}
-              placeholder="First Name"
-              required
-            />
-            <input
-              type="text"
-              name="lastname"
-              value={contactData.lastname}
-              onChange={handleChange}
-              placeholder="Last Name"
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              value={contactData.email}
-              onChange={handleChange}
-              placeholder="Email"
-              required
-            />
-
-            <input
-              type="text"
-              name="phonenumber"
-              value={contactData.phonenumber}
-              onChange={handleChange}
-              placeholder="Phone Number"
-              required
-            />
-            <input
-              type="text"
-              name="job_title"
-              value={contactData.job_title}
-              onChange={handleChange}
-              placeholder="Job Title"
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              value={contactData.password}
-              onChange={handleChange}
-              placeholder="password"
-              required
-            />
-
-            <input
-              type="text"
-              name="company_name"
-              value={contactData.company_name}
-              onChange={handleChange}
-              placeholder="Company Name"
-              required
-            />
-          </div>
-          <textarea
-            maxLength="50"
-            type="text"
-            name="address"
-            rows="5"
-            value={contactData.address}
-            onChange={handleChange}
-            placeholder="Address"
-            required
-          />
-          <button type="submit" className="submit-btn">
-            {isEditing ? "Update Contact" : "Add Contact"}
-          </button>
-        </form>
         <h3 className="table-name">Employee Data</h3>
-        {loading ? (
-          <div className={`${loading && "loading"}`}>
-            <ClipLoader color="rgba(227, 0, 27, 1)" />
-          </div>
-        ) : (
-          <div className="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone Number</th>
-                  <th>Job Title</th>
-                  <th>Password</th>
-                  <th>Company Name</th>
-                  <th>Address</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {contacts.map((contact) => (
-                  <tr key={contact.id}>
-                    <td>
-                      {contact.firstname} {contact.lastname}
-                    </td>
-                    <td>{contact.email}</td>
-                    <td>{contact.phonenumber}</td>
-                    <td>{contact.job_title}</td>
-                    <td>{contact.password ? "*****" : contactData.password}</td>
-                    <td>{contact.company_name}</td>
-                    <td>{contact.address}</td>
-                    <td>
-                      <button
-                        className="btn-icon"
-                        onClick={() => handleEdit(contact)}
-                      >
-                        <MdModeEditOutline />
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="btn-icon"
-                        onClick={() => handleDelete(contact.id)}
-                      >
-                        <MdDelete />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <div>
+          {loading ? (
+            <div className="loading">
+              <ClipLoader color="rgba(227, 0, 27, 1)" />
+            </div>
+          ) : (
+            <>
+              <div className="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone Number</th>
+                      <th>Job Title</th>
+                      <th>Company Name</th>
+                      <th>Address</th>
+                      <th>Status</th>
+                      <th>Edit</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {contacts.map((contact) => (
+                      <tr key={contact.id}>
+                        <td>
+                          {contact.firstname} {contact.lastname}
+                        </td>
+                        <td>{contact.email}</td>
+                        <td>{contact.phonenumber}</td>
+                        <td>{contact.job_title}</td>
+                        <td>{contact.company_name}</td>
+                        <td>{contact.address}</td>
+                        <td>{contact.status}</td>
+                        <td>
+                          <Popup
+                            trigger={
+                              <button className="btn-icon">
+                                <MdModeEditOutline
+                                  onClick={() => handleEdit(contact)}
+                                />
+                              </button>
+                            }
+                            modal
+                            nested
+                          >
+                            {(close) => (
+                              <div>
+                                <div className="form-title">
+                                  <h2 className="table-name">Employee Form</h2>
+                                  <button
+                                    className="close-btn"
+                                    onClick={() => close()}
+                                  >
+                                    <IoIosClose />
+                                  </button>
+                                </div>
+                                <form className="form" onSubmit={handleSubmit}>
+                                  <div className="form-div">
+                                    <input
+                                      type="text"
+                                      name="firstname"
+                                      value={contactData.firstname}
+                                      onChange={handleChange}
+                                      placeholder="First Name"
+                                    />
+                                    <input
+                                      type="text"
+                                      name="lastname"
+                                      value={contactData.lastname}
+                                      onChange={handleChange}
+                                      placeholder="Last Name"
+                                    />
+                                    <input
+                                      type="email"
+                                      name="email"
+                                      value={contactData.email}
+                                      onChange={handleChange}
+                                      placeholder="Email"
+                                    />
+                                    <input
+                                      type="text"
+                                      name="phonenumber"
+                                      value={contactData.phonenumber}
+                                      onChange={handleChange}
+                                      placeholder="Phone Number"
+                                    />
+                                    <input
+                                      type="text"
+                                      name="job_title"
+                                      value={contactData.job_title}
+                                      onChange={handleChange}
+                                      placeholder="Job Title"
+                                    />
+                                    <input
+                                      type="text"
+                                      name="company_name"
+                                      value={contactData.company_name}
+                                      onChange={handleChange}
+                                      placeholder="Company Name"
+                                    />
+                                    <select
+                                      name="status"
+                                      value={contactData.status}
+                                      onChange={handleChange}
+                                    >
+                                      <option>--select status</option>
+                                      <option value="active">Active</option>
+                                      <option value="inactive">
+                                        In-Active
+                                      </option>
+                                    </select>
+                                  </div>
+                                  <textarea
+                                    maxLength="50"
+                                    type="text"
+                                    name="address"
+                                    rows="rows"
+                                    value={contactData.address}
+                                    onChange={handleChange}
+                                    placeholder="Address"
+                                  />
+                                  <button type="submit" className="submit-btn">
+                                    Update Contact
+                                  </button>
+                                </form>
+                              </div>
+                            )}
+                          </Popup>
+                        </td>
+                        <td>
+                          <button
+                            className="btn-icon"
+                            onClick={() => handleDelete(contact.id)}
+                          >
+                            <MdDelete />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <Popup
+                  trigger={<button className="submit-btn">Add Employee</button>}
+                  modal
+                  nested
+                >
+                  {(close) => (
+                    <div className="popup-inner">
+                      <div className="form-title">
+                        <h2 className="table-name">Employee Form</h2>
+                        <button className="close-btn" onClick={() => close()}>
+                          <IoIosClose />
+                        </button>
+                      </div>
+                      <form className="form" onSubmit={handleSubmit}>
+                        <div className="form-div">
+                          <input
+                            type="text"
+                            name="firstname"
+                            value={contactData.firstname}
+                            onChange={handleChange}
+                            placeholder="First Name"
+                          />
+                          <input
+                            type="text"
+                            name="lastname"
+                            value={contactData.lastname}
+                            onChange={handleChange}
+                            placeholder="Last Name"
+                          />
+                          <input
+                            type="email"
+                            name="email"
+                            value={contactData.email}
+                            onChange={handleChange}
+                            placeholder="Email"
+                          />
+                          <input
+                            type="text"
+                            name="phonenumber"
+                            value={contactData.phonenumber}
+                            onChange={handleChange}
+                            placeholder="Phone Number"
+                          />
+                          <input
+                            type="text"
+                            name="job_title"
+                            value={contactData.job_title}
+                            onChange={handleChange}
+                            placeholder="Job Title"
+                          />
+                          <input
+                            type="text"
+                            name="company_name"
+                            value={contactData.company_name}
+                            onChange={handleChange}
+                            placeholder="Company Name"
+                          />
+                          <select
+                            name="status"
+                            value={contactData.status}
+                            onChange={handleChange}
+                          >
+                            <option>--select status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">In-Active</option>
+                          </select>
+                        </div>
+                        <textarea
+                          maxLength="50"
+                          type="text"
+                          name="address"
+                          rows="rows"
+                          value={contactData.address}
+                          onChange={handleChange}
+                          placeholder="Address"
+                        />
+                        <button type="submit" className="submit-btn">
+                          Add Contact
+                        </button>
+                      </form>
+                    </div>
+                  )}
+                </Popup>
+              </div>
+            </>
+          )}
+        </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

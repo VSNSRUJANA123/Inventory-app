@@ -1,6 +1,5 @@
 import Home from "./components/Home.js";
 import NotFound from "./components/NotFound.js";
-import Order from "./components/Order.js";
 import Product from "./components/Product.js";
 import Supplier from "./components/Supplier.js";
 import Employee from "./components/Employee.js";
@@ -10,6 +9,7 @@ import Register from "./components/Register.js";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
+import Purchase from "./components/Purchase.js";
 
 const ProtectedRoute = ({ children, roleRequired }) => {
   const token = Cookies.get("token");
@@ -31,7 +31,7 @@ const App = () => {
         <Route path="/employee" element={<Employee />} />
         <Route path="/supplier" element={<Supplier />} />
         <Route path="/product" element={<Product />} />
-        <Route path="/order" element={<Order />} />
+        <Route path="/purchase" element={<Purchase />} />
         <Route
           path="/login"
           element={

@@ -3,11 +3,11 @@
 }
 .admin-container {
   display: flex;
-  flex: 10;
+  margin-left: 8rem;
 }
 .side-nav-content {
   overflow-x: hidden;
-  flex: 1.2;
+  /* flex: 1.2; */
   background-color: #efeded;
   padding: 15px;
   position: fixed;
@@ -48,18 +48,3 @@
 .small-icon {
   display: none;
 }
-
-/* @media (max-width: 769px) {
-  .side-nav-content {
-    flex: 0.5;
-  }
-  .small-side-nav {
-    display: none;
-  }
-  .small-icon {
-    display: block;
-  }
-  .admin-title {
-    font-size: 12px;
-  }
-} */

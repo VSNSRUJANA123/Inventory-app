@@ -43,13 +43,13 @@ form.form {
   flex-direction: column;
 }
 .form-div {
+  gap: 10px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
 }
 
 input {
-  margin-top: 10px;
-  margin-right: 10px;
+  width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
 }
@@ -71,28 +71,47 @@ textarea {
 }
 .table-name {
   color: #e3001b;
-  padding: 15px;
+  padding: 10px;
   padding-left: 0;
 }
 .loading {
   height: 10vh;
   text-align: center;
 }
-@media (max-width: 767px) {
+.popup-content {
+  width: 80% !important;
+  padding: 12px !important;
+}
+.form-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+}
+textarea {
+  height: 10em;
+}
+.close-btn {
+  background: transparent;
+  cursor: pointer;
+  font-size: 30px;
+  border: none;
+}
+/* .table-container {
+  overflow-x: scroll;
+} */
+@media (max-width: 1045px) {
   .table-container {
     overflow-x: scroll;
   }
-  .form-div {
-    grid-template-columns: 1fr;
+  textarea {
+    height: 4em;
   }
-
-  /* .supplier-box {
-    display: block;
-    margin-bottom: 0px;
+}
+@media (max-width: 767px) {
+}
+@media (max-width: 467px) {
+  textarea {
+    height: 4em;
   }
-  .supplier-box input {
-    width: 100%;
-    margin-right: 0px;
-    margin-bottom: 10px;
-  } */
 }

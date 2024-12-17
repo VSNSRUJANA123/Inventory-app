@@ -3,7 +3,7 @@ const Home = () => {
   return (
     <div>
       <Navbar />
-      Web page
+      Home Page
     </div>
   );
 };

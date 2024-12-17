@@ -27,7 +27,6 @@ const Employee = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editContactId, setEditContactId] = useState(null);
-
   const fetchContacts = async () => {
     setLoading(true);
     try {
@@ -102,7 +101,6 @@ const Employee = () => {
       try {
         const response = await axios.post(`${api}/employees/`, contactData);
         fetchContacts();
-        // setClosePopup(!closePopup);
         setContactData({
           firstname: "",
           lastname: "",
@@ -173,7 +171,18 @@ const Employee = () => {
       console.error("Error deleting contact:", error);
     }
   };
-
+  const resetForm = () => {
+    setContactData({
+      firstname: "",
+      lastname: "",
+      email: "",
+      phonenumber: "",
+      job_title: "",
+      company_name: "",
+      address: "",
+      status: "",
+    });
+  };
   return (
     <div className="admin-page">
       <Sidenav />
@@ -301,9 +310,25 @@ const Employee = () => {
                                     onChange={handleChange}
                                     placeholder="Address"
                                   />
-                                  <button type="submit" className="submit-btn">
-                                    Update Contact
-                                  </button>
+
+                                  <div>
+                                    <button
+                                      type="submit"
+                                      className="submit-btn"
+                                    >
+                                      Update Employee
+                                    </button>
+                                    <button
+                                      style={{ marginLeft: "10px" }}
+                                      className="submit-btn"
+                                      onClick={() => {
+                                        close();
+                                        resetForm();
+                                      }}
+                                    >
+                                      Close
+                                    </button>
+                                  </div>
                                 </form>
                               </div>
                             )}
@@ -399,9 +424,21 @@ const Employee = () => {
                           onChange={handleChange}
                           placeholder="Address"
                         />
-                        <button type="submit" className="submit-btn">
-                          Add Contact
-                        </button>
+                        <div>
+                          <button type="submit" className="submit-btn">
+                            Add Employee
+                          </button>
+                          <button
+                            style={{ marginLeft: "10px" }}
+                            className="submit-btn"
+                            onClick={() => {
+                              close();
+                              resetForm();
+                            }}
+                          >
+                            Close
+                          </button>
+                        </div>
                       </form>
                     </div>
                   )}

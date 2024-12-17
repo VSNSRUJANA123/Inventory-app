@@ -6,48 +6,95 @@ import Employee from "./components/Employee.js";
 import Login from "./components/Login.js";
 import Admin from "./components/Admin.js";
 import Register from "./components/Register.js";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import Cookies from "js-cookie";
 import Purchase from "./components/Purchase.js";
+import Cookies from "js-cookie";
 
-const ProtectedRoute = ({ children, roleRequired }) => {
+const ProtectedRoute = ({ children, allowedRoles }) => {
   const token = Cookies.get("token");
   const role = Cookies.get("role");
-  if (!token) return <Navigate to="/login" replace />;
-  if (roleRequired && role !== roleRequired) {
-    return <Navigate to="/" />;
+
+  if (!token) {
+    return <Navigate to="/login" replace />;
   }
-  return children;
+  if (allowedRoles && !allowedRoles.includes(role)) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children ? children : <Outlet />;
 };
+
 const App = () => {
   const token = Cookies.get("token");
   const role = Cookies.get("role");
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<Admin />} />
-        <Route path="/employee" element={<Employee />} />
-        <Route path="/supplier" element={<Supplier />} />
-        <Route path="/product" element={<Product />} />
-        <Route path="/purchase" element={<Purchase />} />
         <Route
-          path="/login"
+          path="/"
           element={
-            !Cookies.get("token") ? <Login /> : <Navigate to="/" replace />
+            <ProtectedRoute>
+              {role === "admin" ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <Home />
+              )}
+            </ProtectedRoute>
           }
         />
         <Route
-          path="/register"
+          path="/dashboard"
           element={
-            !Cookies.get("token") ? <Register /> : <Navigate to="/" replace />
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Admin />
+            </ProtectedRoute>
           }
         />
+        <Route
+          path="/employee"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Employee />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/supplier"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Supplier />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/product"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Product />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/purchase"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <Purchase />
+            </ProtectedRoute>
+          }
+        />
+        {!token && <Route path="/login" element={<Login />} />}
+        {!token && <Route path="/register" element={<Register />} />}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
 };
-
 export default App;

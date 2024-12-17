@@ -17,7 +17,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const res = await axios.post(`${api}/api/auth/register`, adminDetails);
-      toast("register successfully");
+      toast(res.data.message);
       navigate("/login");
     } catch (err) {
       toast(err.response.data, {
@@ -42,6 +42,7 @@ const Register = () => {
         <form onSubmit={onHandleSubmit}>
           <h2 className="login-name">Register Form</h2>
           <input
+            style={{ marginBottom: "10px" }}
             value={adminDetails.adminname}
             onChange={changeHandle}
             placeholder="enter name"

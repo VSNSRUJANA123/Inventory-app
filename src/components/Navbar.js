@@ -7,7 +7,7 @@ const Navbar = () => {
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("role");
-    navigate("/login", { replace: true });
+    navigate("/login");
   };
 
   return (

@@ -1,13 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/sidenav.css";
-import { BsReverseLayoutSidebarInsetReverse } from "react-icons/bs";
 import Cookies from "js-cookie";
 const Sidenav = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("role");
-    navigate("/login", { replace: true });
+    navigate("/login");
   };
   return (
     <div className="side-nav-content">

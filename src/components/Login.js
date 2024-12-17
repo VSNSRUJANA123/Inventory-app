@@ -7,12 +7,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
-
+import { useDispatch } from "react-redux";
+import { updateState } from "../redux/AuthSlice";
 const Login = () => {
   const [adminDetails, setAdminDetails] = useState({
     username: "",
     password: "",
   });
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const onHandleSubmit = async (e) => {
     e.preventDefault();
@@ -21,8 +23,7 @@ const Login = () => {
       toast("login successfully");
       const { result } = res.data;
       const { token } = res.data;
-      Cookies.set("role", result[0].role, { expires: 30 });
-      Cookies.set("token", token, { expires: 30 });
+      dispatch(updateState({ role: result[0].role, token }));
       if (result[0].role === "admin") {
         navigate("/dashboard");
       } else {
@@ -57,6 +58,7 @@ const Login = () => {
             placeholder="Enter Name"
             name="username"
             type="text"
+            style={{ marginBottom: "10px" }}
           />
           <input
             value={adminDetails.password}
